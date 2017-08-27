@@ -92,8 +92,7 @@
             var my;
             
             this.ready = function( callback ) {
-                my = self.ccm.helper.privatize( self );
-                
+                my = self.ccm.helper.privatize( self );                
                 if( callback ) callback();
             };
             
@@ -110,19 +109,25 @@
              
                 // add interaction functionality
                 self.element.querySelector('.button-open')
-                        .addEventListener('click', function( e ) {
-                            sidebar.classList.add('visible');
-                        });
+                        .addEventListener('click', self.openNavigation);
                 self.element.querySelector('.button-close')
+                        .addEventListener('click', self.closeNavigation);
+                 self.element.querySelector('.sidebar-container')
                         .addEventListener('click', function( e ) {
-                            sidebar.classList.remove('visible');
+                            e.stopPropagation();
                         });
-                sidebar.addEventListener('click', function( e ) {
-                     sidebar.classList.remove('visible');
-                });
+                sidebar.addEventListener('click', self.closeNavigation);
                 
                 
                 if( callback ) callback();
+            };
+            
+            this.openNavigation = function ( e ) {
+                self.element.querySelector('.sidebar').classList.add('visible');
+            };
+            
+            this.closeNavigation = function ( e ) {
+                self.element.querySelector('.sidebar').classList.remove('visible');
             };
         }
     };

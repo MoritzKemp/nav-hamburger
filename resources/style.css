@@ -21,11 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-/* 
-    Created on : 26.08.2017, 15:22:05
-    Author     : Moritz Kemp <moritz at kemp-thelen.de>
-*/
 
+/* ---- Header ---- */
 .header {
     position: fixed;
     width: 100%;
@@ -36,8 +33,24 @@ THE SOFTWARE.
     box-shadow: 2px 0 7px rgba(0,0,0,0.5);
 }
 
+.sidebar-header {
+    width: 100%;
+    background-color: #f98722;
+}
+
+.sidebar-header > div{
+    clear: right;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 1.5em;
+    padding: 20px 0 10px 0;
+}
+
+/* ---- Sidebar ---- */
 .sidebar {
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
@@ -45,17 +58,6 @@ THE SOFTWARE.
     pointer-events: none;
     overflow: hidden;
     font-family: sans-serif;
-}
-
-.sidebar::before {
-    content: '';
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     background-color: rgba(0,0,0,0.4);
     opacity: 0;
     transition: opacity 200ms;
@@ -71,10 +73,9 @@ THE SOFTWARE.
     box-shadow: 2px 0 7px rgba(0,0,0,0.5);
     transform: translateX(-102%);
     transition: transform 200ms;
-    pointer-events: auto;
 }
 
-.visible.sidebar::before {
+.visible.sidebar {
     pointer-events: auto;
     opacity: 1;
 }
@@ -83,6 +84,7 @@ THE SOFTWARE.
     transform: none;
 }
 
+/* ---- Buttons ---- */
 .button-close {
     background-color: white;
     width: 50px;
@@ -102,16 +104,3 @@ THE SOFTWARE.
     font-weight: bold;
 }
 
-.sidebar-header {
-    width: 100%;
-    background-color: #f98722;
-}
-
-.sidebar-header > div{
-    clear: right;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 1.5em;
-    padding: 20px 0 10px 0;
-}
