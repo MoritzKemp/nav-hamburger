@@ -32,21 +32,27 @@
             'html': {
                 'sidebar': {
                     'tag': 'aside',
-                    'class': 'nav-sidebar',
+                    'class': 'sidebar',
                     'inner':
                         {
                             'tag': 'nav',
-                            'class': 'nav-sidebar__container',
+                            'class': 'sidebar-container',
                             'inner': [
                                 {
-                                    'tag': 'a',
-                                    'href': '#',
-                                    'inner': 'home'
-                                },
-                                {
-                                    'tag': 'a',
-                                    'href': '#',
-                                    'inner': 'Section 1'
+                                    'tag': 'div',
+                                    'class': 'sidebar-header',
+                                    'inner': [
+                                         {
+                                            'tag': 'button',
+                                            'type': 'button',
+                                            'class': 'button-close',
+                                            'inner': 'Close'
+                                        },
+                                        {
+                                            'tag': 'div',
+                                            'inner': 'Navigation'
+                                        }
+                                    ]
                                 }
                             ]
 
@@ -59,8 +65,21 @@
                         {
                             'tag': 'button',
                             'type': 'button',
-                            'class': 'nav-button',
+                            'class': 'button-open',
                             'inner': 'Menu'
+                        }
+                    ]
+                },
+                'list': {
+                    'tag': 'ul',
+                    'inner': [
+                        {
+                            'tag': 'li',
+                            'inner': 'Section 1'
+                        },
+                        {
+                            'tag': 'li',
+                            'inner': 'Section 2'
                         }
                     ]
                 }
@@ -73,20 +92,35 @@
             var my;
             
             this.ready = function( callback ) {
-                console.log('[Nav-Hamburger] Ready');
                 my = self.ccm.helper.privatize( self );
                 
                 if( callback ) callback();
             };
             
             this.start = function( callback ) {
-                console.log('[Nav-Hamburger] Start');
                 
+                // build the view
                 var header  = self.ccm.helper.html(my.html.header);
                 var sidebar = self.ccm.helper.html(my.html.sidebar);
-                
+                var list    = self.ccm.helper.html(my.html.list);
                 self.element.appendChild( header );
+                sidebar.querySelector('.sidebar-container')
+                       .appendChild( list );
                 self.element.appendChild( sidebar );
+             
+                // add interaction functionality
+                self.element.querySelector('.button-open')
+                        .addEventListener('click', function( e ) {
+                            sidebar.classList.add('visible');
+                        });
+                self.element.querySelector('.button-close')
+                        .addEventListener('click', function( e ) {
+                            sidebar.classList.remove('visible');
+                        });
+                sidebar.addEventListener('click', function( e ) {
+                     sidebar.classList.remove('visible');
+                });
+                
                 
                 if( callback ) callback();
             };
