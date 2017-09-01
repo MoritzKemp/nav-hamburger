@@ -1,4 +1,4 @@
-/* 
+    /* 
  * The MIT License
  *
  * Copyright 2017 Moritz Kemp <moritz at kemp-thelen.de>.
@@ -89,7 +89,7 @@
             },
             'css': ['ccm.load', './resources/style.css'],
             'headerText' : '',
-            'section': []
+            'section': [{'text':'test', 'action':function(){console.log('ttt');}}]
         },
         
         Instance: function() {
@@ -146,11 +146,13 @@
                 }
                 self.element.appendChild( header );
                 
+                // build sections and add click events
                 for(i=0; i < my.section.length; i++){
                     var listItem = document.createElement('LI');
                     var textEl = document.createTextNode(my.section[i].text);
                     listItem.appendChild(textEl);
-                    listItem.addEventListener('click', my.section[i].action);
+                    listItem.addEventListener( 'click', this.onSectionClick );
+                    listItem.action = my.section[i].action;
                     list.appendChild(listItem);
                 }
                 
@@ -171,6 +173,13 @@
                 self.element.querySelector('.sidebar-container').classList.add('sidebar-container-animatable');
                 self.element.querySelector('.sidebar').classList.remove('visible');
                 self.element.querySelector('.sidebar-container').addEventListener('transitionend', self.onTransistionEnd);
+            };
+                      
+            this.onSectionClick = function ( e ) {
+                self.closeNavigation();
+                if(typeof(e.target.action) === 'function') {
+                    e.target.action();
+                }
             };
             
             // Touch functionality
