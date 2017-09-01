@@ -90,6 +90,9 @@
         Instance: function() {
             var self = this;
             var my;
+            var touchXstart = 0;
+            var touchXdistance = 0;
+            
             
             this.ready = function( callback ) {
                 my = self.ccm.helper.privatize( self );                
@@ -102,6 +105,7 @@
                 var header  = self.ccm.helper.html(my.html.header);
                 var sidebar = self.ccm.helper.html(my.html.sidebar);
                 var list    = self.ccm.helper.html(my.html.list);
+                
                 self.element.appendChild( header );
                 sidebar.querySelector('.sidebar-container')
                        .appendChild( list );
@@ -109,25 +113,60 @@
              
                 // add interaction functionality
                 self.element.querySelector('.button-open')
-                        .addEventListener('click', self.openNavigation);
+                            .addEventListener('click', self.openNavigation);
                 self.element.querySelector('.button-close')
-                        .addEventListener('click', self.closeNavigation);
-                 self.element.querySelector('.sidebar-container')
-                        .addEventListener('click', function( e ) {
+                            .addEventListener('click', self.closeNavigation);
+                self.element.querySelector('.sidebar-container')
+                            .addEventListener('click', function( e ) {
                             e.stopPropagation();
                         });
                 sidebar.addEventListener('click', self.closeNavigation);
                 
+                // Touch gesture control
+                self.element.querySelector('.sidebar-container')
+                            .addEventListener('touchstart', self.touchstart);
+                self.element.querySelector('.sidebar-container')
+                            .addEventListener('touchmove', self.touchmove);
+                
+                self.element.querySelector('.sidebar-container')
+                            .addEventListener('touchend', self.touchend);
                 
                 if( callback ) callback();
             };
             
-            this.openNavigation = function ( e ) {
+            this.openNavigation = function ( ) {
+                self.element.querySelector('.sidebar-container').classList.add('sidebar-container-animatable');
                 self.element.querySelector('.sidebar').classList.add('visible');
+                self.element.querySelector('.sidebar-container').addEventListener('transitionend', self.onTransistionEnd);
             };
             
-            this.closeNavigation = function ( e ) {
+            this.closeNavigation = function ( ) {
+                self.element.querySelector('.sidebar-container').classList.add('sidebar-container-animatable');
                 self.element.querySelector('.sidebar').classList.remove('visible');
+                self.element.querySelector('.sidebar-container').addEventListener('transitionend', self.onTransistionEnd);
+            };
+            
+            // Touch functionality
+            this.onTransistionEnd = function ( ) {
+                self.element.querySelector('.sidebar-container').classList.remove('sidebar-container-animatable');
+                self.element.querySelector('.sidebar-container').removeEventListener('transitionend', self.onTransistionEnd);
+            };
+            
+            this.touchstart = function ( e ) {
+                self.touchXstart = e.touches[0].pageX;
+            };
+            
+            this.touchmove = function ( e ) {
+                self.touchXdistance = Math.min(0, e.touches[0].pageX - self.touchXstart);
+                self.element.querySelector('.sidebar-container').style.transform = 'translateX('+ self.touchXdistance +'px)';
+            };
+            
+            this.touchend = function ( e ) {
+                self.element.querySelector('.sidebar-container').style.transform = '';
+                if(self.touchXdistance < -50) {
+                    self.closeNavigation();
+                    self.touchXdistance = 0;
+                }
             };
         }
     };
@@ -137,5 +176,4 @@
         window.ccm[v].component(component);
     }
     var f="ccm."+component.name+(component.version?"-"+component.version.join("."):"")+".js";if(window.ccm&&null===window.ccm.files[f])window.ccm.files[f]=component;else{var n=window.ccm&&window.ccm.components[component.name];n&&n.ccm&&(component.ccm=n.ccm),"string"==typeof component.ccm&&(component.ccm={url:component.ccm});var v=component.ccm.url.split("/").pop().split("-");if(v.length>1?(v=v[1].split("."),v.pop(),"min"===v[v.length-1]&&v.pop(),v=v.join(".")):v="latest",window.ccm&&window.ccm[v])p();else{var e=document.createElement("script");document.head.appendChild(e),component.ccm.integrity&&e.setAttribute("integrity",component.ccm.integrity),component.ccm.crossorigin&&e.setAttribute("crossorigin",component.ccm.crossorigin),e.onload=function(){p(),document.head.removeChild(e)},e.src=component.ccm.url}}
-    
 }());
