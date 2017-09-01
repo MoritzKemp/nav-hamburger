@@ -63,28 +63,33 @@
                     'class': 'header',
                     'inner':[
                         {
-                            'tag': 'button',
-                            'type': 'button',
-                            'class': 'button-open',
-                            'inner': 'Menu'
+                            'tag': 'div',
+                            'class': 'button-container',
+                            'inner': {
+                                'tag': 'button',
+                                'type': 'button',
+                                'class': 'button-open',
+                                'inner': 'Menu'
+                            }
+                        },
+                        {
+                            'tag':'div',
+                            'class':'text-container'
+                        },
+                        {
+                            'tag':'div',
+                            'class':'spacer'
                         }
                     ]
                 },
                 'list': {
                     'tag': 'ul',
-                    'inner': [
-                        {
-                            'tag': 'li',
-                            'inner': 'Section 1'
-                        },
-                        {
-                            'tag': 'li',
-                            'inner': 'Section 2'
-                        }
-                    ]
+                    'inner': ''
                 }
             },
-            'css': ['ccm.load', './resources/style.css']
+            'css': ['ccm.load', './resources/style.css'],
+            'headerText' : '',
+            'section': []
         },
         
         Instance: function() {
@@ -101,16 +106,9 @@
             
             this.start = function( callback ) {
                 
-                // build the view
-                var header  = self.ccm.helper.html(my.html.header);
-                var sidebar = self.ccm.helper.html(my.html.sidebar);
-                var list    = self.ccm.helper.html(my.html.list);
+                // Build view
+                self.buildView();
                 
-                self.element.appendChild( header );
-                sidebar.querySelector('.sidebar-container')
-                       .appendChild( list );
-                self.element.appendChild( sidebar );
-             
                 // add interaction functionality
                 self.element.querySelector('.button-open')
                             .addEventListener('click', self.openNavigation);
@@ -120,7 +118,8 @@
                             .addEventListener('click', function( e ) {
                             e.stopPropagation();
                         });
-                sidebar.addEventListener('click', self.closeNavigation);
+                self.element.querySelector('.sidebar')
+                            .addEventListener('click', self.closeNavigation);
                 
                 // Touch gesture control
                 self.element.querySelector('.sidebar-container')
@@ -132,6 +131,34 @@
                             .addEventListener('touchend', self.touchend);
                 
                 if( callback ) callback();
+            };
+            
+            this.buildView = function( ) {
+                 // build the view
+                var header  = self.ccm.helper.html(my.html.header);
+                var sidebar = self.ccm.helper.html(my.html.sidebar);
+                var list    = self.ccm.helper.html(my.html.list);
+                
+                if(my.headerText !== '' && (typeof my.headerText === 'string')) {
+                    header.querySelector('.text-container').appendChild(
+                        document.createTextNode(my.headerText)
+                    );
+                }
+                self.element.appendChild( header );
+                
+                for(i=0; i < my.section.length; i++){
+                    var listItem = document.createElement('LI');
+                    var textEl = document.createTextNode(my.section[i].text);
+                    listItem.appendChild(textEl);
+                    listItem.addEventListener('click', my.section[i].action);
+                    list.appendChild(listItem);
+                }
+                
+                sidebar.querySelector('.sidebar-container')
+                       .appendChild( list );
+                
+               
+                self.element.appendChild( sidebar );
             };
             
             this.openNavigation = function ( ) {
