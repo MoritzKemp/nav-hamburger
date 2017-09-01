@@ -89,7 +89,7 @@
             },
             'css': ['ccm.load', './resources/style.css'],
             'headerText' : '',
-            'section': [{'text':'test', 'action':function(){console.log('ttt');}}]
+            'section': []
         },
         
         Instance: function() {
