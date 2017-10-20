@@ -87,7 +87,7 @@
                     'inner': ''
                 }
             },
-            'css': ['ccm.load', 'https://moritzkemp.github.io/nav-hamburger/resources/style.css'],
+            'css': ['ccm.load', 'http://MoritzKemp.github.io/nav-hamburger/resources/style.css'],
             'headerText' : '',
             'section': []
         },
