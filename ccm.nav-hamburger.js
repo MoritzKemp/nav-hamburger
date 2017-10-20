@@ -87,7 +87,7 @@
                     'inner': ''
                 }
             },
-            'css': ['ccm.load', './resources/style.css'],
+            'css': ['ccm.load', './style.css'],
             'headerText' : '',
             'section': []
         },

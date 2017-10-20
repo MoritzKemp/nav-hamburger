@@ -22,8 +22,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
+<!--<ccm-nav-hamburger></ccm-nav-hamburger>-->
 <head>
     <meta name="viewport" content="width=device-width">
+    <script src="https://akless.github.io/ccm/ccm.min.js"></script>
+    <script src="./ccm.nav-hamburger.js"></script>
 </head>
-<script src="./ccm.nav-hamburger.js"></script>
-<ccm-nav-hamburger></ccm-nav-hamburger>
+
+<div class="nav"></div>
+
+<script>
+    ccm.start('nav-hamburger', {
+        root: document.querySelector('.nav')
+    });
+</script>
